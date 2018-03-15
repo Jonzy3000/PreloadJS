@@ -66,6 +66,8 @@ this.createjs = this.createjs || {};
 			this._tag = createjs.Elements.img();
 		}
 
+		this.imageWorker = new createjs.ImageWorker();
+
 		this.on("initialize", this._updateXHR, this);
 	};
 
@@ -94,7 +96,7 @@ this.createjs = this.createjs || {};
 		}
 
 		if (window.createImageBitmap != null) {
-			return new createjs.ImageWorker().loadImageWithWorker(new URL(this._item.src, window.location).toString()).then(function (img) {
+			return this.imageWorker.loadImageWithWorker(new URL(this._item.src, window.location).toString()).then(function (img) {
 				this._tag = img;
 				this._rawResult = img;
 				this._result = img;
