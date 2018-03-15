@@ -40,7 +40,8 @@
 		"../src/preloadjs/loaders/VideoLoader.js",
 		"../src/preloadjs/loaders/SpriteSheetLoader.js",
 		"../src/preloadjs/loaders/SVGLoader.js",
-		"../src/preloadjs/loaders/XMLLoader.js"
+		"../src/preloadjs/loaders/XMLLoader.js",
+		"../src/preloadjs/workers/ImageWorker.js"
 	],
 
   "docs_out_path": "../../createjs-com_version2/docs/preloadjs/"

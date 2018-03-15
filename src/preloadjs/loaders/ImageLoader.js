@@ -42,7 +42,7 @@ this.createjs = this.createjs || {};
 	 * @extends AbstractLoader
 	 * @constructor
 	 */
-	function ImageLoader (loadItem, preferXHR) {
+	function ImageLoader(loadItem, preferXHR) {
 		this.AbstractLoader_constructor(loadItem, preferXHR, createjs.Types.IMAGE);
 
 		// public properties
@@ -65,6 +65,8 @@ this.createjs = this.createjs || {};
 		} else {
 			this._tag = createjs.Elements.img();
 		}
+
+		this.imageWorker = new createjs.ImageWorker();
 
 		this.on("initialize", this._updateXHR, this);
 	};
@@ -91,6 +93,15 @@ this.createjs = this.createjs || {};
 			this._request._handleTagComplete();
 			this._sendComplete();
 			return;
+		}
+
+		if (window.createImageBitmap != null) {
+			return this.imageWorker.loadImageWithWorker(new URL(this._item.src, window.location).toString()).then(function (img) {
+				this._tag = img;
+				this._rawResult = img;
+				this._result = img;
+				this._sendComplete();
+			}.bind(this));
 		}
 
 		var crossOrigin = this._item.crossOrigin;
@@ -157,15 +168,15 @@ this.createjs = this.createjs || {};
 		if (tag.complete) {
 			successCallback(tag);
 		} else {
-            tag.onload = createjs.proxy(function() {
-                successCallback(this._tag);
-                tag.onload = tag.onerror = null;
-            }, this);
+			tag.onload = createjs.proxy(function () {
+				successCallback(this._tag);
+				tag.onload = tag.onerror = null;
+			}, this);
 
-            tag.onerror = createjs.proxy(function(event) {
-                errorCallback(new createjs.ErrorEvent('IMAGE_FORMAT', null, event));
-                tag.onload = tag.onerror = null;
-            }, this);
+			tag.onerror = createjs.proxy(function (event) {
+				errorCallback(new createjs.ErrorEvent('IMAGE_FORMAT', null, event));
+				tag.onload = tag.onerror = null;
+			}, this);
 		}
 	};
 
